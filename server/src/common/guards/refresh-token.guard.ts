@@ -28,7 +28,7 @@ export class RefreshTokenGuard extends AuthGuard('jwt') {
         }
 
         try {
-            request.user = this.jwtService.verify(refreshToken, { secret: appConfig.jwt.refreshTokenSecret });
+            request.user = this.jwtService.verify(refreshToken, { secret: appConfig.jwt.secret });
             request.user.refreshToken = refreshToken;
             return true;
         } catch (e) {

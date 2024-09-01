@@ -1,12 +1,14 @@
 import 'dotenv/config';
 
-const { APP_PORT, APP_MODE, ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET  } = process.env;
+const { APP_PORT, APP_HOST, APP_MODE, TOKEN_SECRET } = process.env;
 
 export default {
-    port: APP_PORT,
+    port: APP_PORT || 3000,
+    host: APP_HOST || 'localhost',
     mode: APP_MODE,
     jwt: {
-        accessTokenSecret: ACCESS_TOKEN_SECRET,
-        refreshTokenSecret: REFRESH_TOKEN_SECRET,
+        secret: TOKEN_SECRET,
+        accessTokenExpiration: '15m',
+        refreshTokenExpiration: '7d',
     }
 }

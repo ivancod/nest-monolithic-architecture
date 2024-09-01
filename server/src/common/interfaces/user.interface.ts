@@ -6,11 +6,9 @@
  * @property {string} password - User password
  * @property {string} refreshToken - User refresh token
  */
-interface User {
+export default interface User {
     id: number;
     email: string;
     password: string;
     refreshToken: string;
 };
-
-export { User };
