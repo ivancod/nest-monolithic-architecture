@@ -7,18 +7,15 @@ export class ResponseTransformMiddleware implements NestMiddleware {
 		const originalSend = res.send.bind(res);
 
 		res.send = (body: any) => {
+			let newBody = body;
+
 			if (res.statusCode >= HttpStatus.OK && res.statusCode < HttpStatus.BAD_REQUEST) {
-				body = {
-					status: 'success',
-					data: body,
-				};
+				newBody = {	status: 'success', data: JSON.parse(body) };
 			} else {
-				body = {
-					status: 'error',
-					message: body.message || 'An error occurred',
-				};
+				newBody = {	status: 'error', message: JSON.parse(body) };
 			}
-			return originalSend(body);
+			
+			return originalSend(JSON.stringify(newBody));
 		};
 
 		next();

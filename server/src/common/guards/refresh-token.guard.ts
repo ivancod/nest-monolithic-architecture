@@ -22,7 +22,7 @@ export class RefreshTokenGuard extends AuthGuard('jwt') {
     canActivate(context: ExecutionContext) {
         const request: Request = context.switchToHttp().getRequest();
         const refreshToken = request.body.refreshToken;
-
+        console.log('refreshToken: ',refreshToken);
         if (!refreshToken) {
             throw new UnauthorizedException('Refresh token is missing');
         }

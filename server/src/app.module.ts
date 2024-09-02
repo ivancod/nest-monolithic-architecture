@@ -7,6 +7,8 @@ import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { ResponseTransformMiddleware } from './middlewares/response-transform.middleware';
+import { HttpLoggerMiddleware } from './middlewares/http-logger.middleware';
+import { JwtStrategy } from './modules/auth/jwt.strategy';
 
 
 @Module({
@@ -21,10 +23,11 @@ import { ResponseTransformMiddleware } from './middlewares/response-transform.mi
         UserModule,
     ],
     controllers: [],
-    providers: [],
+    providers: [JwtStrategy],
 })
 export class AppModule {
     configure(consumer: MiddlewareConsumer): void {
+        consumer.apply(HttpLoggerMiddleware).forRoutes('*');
         consumer.apply(ResponseTransformMiddleware).forRoutes('*');
     }
 }

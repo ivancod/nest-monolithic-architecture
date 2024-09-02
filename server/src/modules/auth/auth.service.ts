@@ -36,16 +36,31 @@ export class AuthService {
 		}
 
 		const payload = { sub: user.id, email: user.email };
-		const accessToken = this.jwtService.sign(payload, { expiresIn: appConfig.jwt.accessTokenExpiration });
-		const refreshToken = this.jwtService.sign(payload, { expiresIn: appConfig.jwt.refreshTokenExpiration });
-
+		const accessToken = this.jwtService.sign(payload, { 
+			secret: appConfig.jwt.secret,
+			expiresIn: appConfig.jwt.accessTokenExpiration 
+		});
+		const refreshToken = this.jwtService.sign(payload, { 
+			secret: appConfig.jwt.secret,
+			expiresIn: appConfig.jwt.refreshTokenExpiration
+		});
 		const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
 		await this.userService.updateRefreshToken(user.id, hashedRefreshToken);
 
-		return {
+		return { 
 			accessToken,
 			refreshToken,
 		};
+	}
+
+	/**
+	 * Get user profile
+	 * 
+	 * @param userId
+	 * @returns
+	 */
+	async me(userId: number) {
+		return this.userService.getUserById(userId);
 	}
 
 	/**
@@ -70,8 +85,14 @@ export class AuthService {
 		}
 
 		const payload = { sub: user.id, email: user.email };
-		const newAccessToken = this.jwtService.sign(payload, { expiresIn: appConfig.jwt.accessTokenExpiration });
-		const newRefreshToken = this.jwtService.sign(payload, { expiresIn: appConfig.jwt.refreshTokenExpiration });
+		const newAccessToken = this.jwtService.sign(payload, { 
+			secret: appConfig.jwt.secret,
+			expiresIn: appConfig.jwt.accessTokenExpiration 
+		});
+		const newRefreshToken = this.jwtService.sign(payload, { 
+			secret: appConfig.jwt.secret,
+			expiresIn: appConfig.jwt.refreshTokenExpiration
+		});
 
 		const hashedRefreshToken = await bcrypt.hash(newRefreshToken, 10);
 		await this.userService.updateRefreshToken(user.id, hashedRefreshToken);

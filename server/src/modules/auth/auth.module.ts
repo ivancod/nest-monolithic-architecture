@@ -11,7 +11,7 @@ import appConfig from 'src/config/app.config';
 		JwtModule.registerAsync({
 			imports: [ConfigModule],
 			useFactory: async (configService: ConfigService) => ({
-				secret: configService.get<string>(appConfig.jwt.secret),
+				secret: appConfig.jwt.secret,
 				signOptions: { expiresIn: appConfig.jwt.accessTokenExpiration },
 			}),
 			inject: [ConfigService],

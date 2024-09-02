@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Get, Body, HttpCode, HttpStatus, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -18,8 +18,7 @@ export class AuthController {
 	 */
 	@Post('register')
 	async register(@Body() registerDto: RegisterDto) {
-		const user = await this.authService.register(registerDto);
-		return { message: 'User successfully registered', user };
+		return await this.authService.register(registerDto);
 	}
 
 	/**
@@ -28,10 +27,23 @@ export class AuthController {
 	 * @param loginDto LoginDto
 	 * @returns
 	 */
-	@HttpCode(HttpStatus.OK)
 	@Post('login')
 	async login(@Body() loginDto: LoginDto) {
 		return this.authService.login(loginDto);
+	}
+
+	/**
+	 * Get user profile
+	 * 
+	 * @param req
+	 * @returns
+	 */
+	@UseGuards(JwtAuthGuard)
+	@Get('me')
+	async me(@Req() req: Request) {
+		const userId = req.user['sub'];
+		console.log(req.user);
+		return this.authService.me(userId);
 	}
 
 	/**
@@ -41,7 +53,6 @@ export class AuthController {
 	 * @returns
 	 */
 	@UseGuards(RefreshTokenGuard)
-	@HttpCode(HttpStatus.OK)
 	@Post('refresh')
 	async refreshTokens(@Req() req: Request) {
 		const userId = req.user['sub'];
@@ -56,7 +67,6 @@ export class AuthController {
 	 * @returns
 	 */
 	@UseGuards(JwtAuthGuard)
-	@HttpCode(HttpStatus.OK)
 	@Post('logout')
 	async logout(@Req() req: Request) {
 		const userId = req.user['sub'];

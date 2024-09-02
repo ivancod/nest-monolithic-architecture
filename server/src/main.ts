@@ -13,7 +13,7 @@ async function bootstrap() {
 		const app = await NestFactory.create(AppModule);
 		app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }));
 		app.useGlobalFilters(new HttpExceptionFilter());
-	
+		app.setGlobalPrefix('api/v1');
 		// Start the server
 		app.listen(port, host, () => {
 			(new Logger('Server')).log(`Listening on ${cyan}http://${host}:${port}`); 
