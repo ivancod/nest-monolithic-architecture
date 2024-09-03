@@ -7,7 +7,7 @@ This is a monolithic architecture project using NestJS. The project is a simple 
 ## Installation
 
 ```bash
-$ cd client && yarn install
+$ cd client && yarn install && yarn build
 $ cd server && npm install && cp .env.example .env
 ```
 ## Create database and credentials to environment variables
